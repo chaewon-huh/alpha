@@ -1,0 +1,43 @@
+{
+  "name": "alpha",
+  "productName": "Alpha",
+  "version": "1.0.0",
+  "description": "Minimal timer app for macOS",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "npm run build:renderer && electron .",
+    "build:renderer": "node build.js",
+    "package": "npm run build:renderer && electron-builder --dir",
+    "dist": "npm run build:renderer && electron-builder"
+  },
+  "keywords": [
+    "timer",
+    "minimal",
+    "macos"
+  ],
+  "author": "Alpha",
+  "license": "MIT",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1",
+    "lit": "^2.7.4"
+  },
+  "devDependencies": {
+    "electron": "^30.5.1",
+    "electron-builder": "^26.0.12",
+    "esbuild": "^0.25.5"
+  },
+  "optionalDependencies": {
+    "electron-liquid-glass": "^1.0.1"
+  },
+  "build": {
+    "appId": "com.alpha.timer",
+    "productName": "Alpha",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "src/assets/icon.jpg"
+    }
+  }
+}
