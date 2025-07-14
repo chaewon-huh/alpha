@@ -12,6 +12,7 @@ class LinearTimer extends LitElement {
         this.targetDate = new Date();
         this.targetTitle = '';
         this.isCompact = false;
+        this.hasPlayedSound = false;
         
         // Start countdown update
         this.updateCountdown();
@@ -66,9 +67,8 @@ class LinearTimer extends LitElement {
             font-weight: 300;
             text-align: center;
             outline: none;
-            width: auto;
-            min-width: 200px;
-            padding: 0;
+            width: calc(100% - 40px);
+            padding: 0 8px;
             border-bottom: 1px solid transparent;
             transition: all 0.2s ease;
             -webkit-app-region: no-drag;
@@ -142,6 +142,7 @@ class LinearTimer extends LitElement {
         const diff = this.targetDate - now;
 
         if (diff <= 0) {
+            this.playCompletionSound();
             return 'Done!';
         }
 
@@ -175,13 +176,65 @@ class LinearTimer extends LitElement {
 
     setTargetDate(e) {
         this.targetDate = e.target.value ? new Date(e.target.value) : null;
+        this.hasPlayedSound = false;
+    }
+
+    playCompletionSound() {
+        if (!this.hasPlayedSound) {
+            this.hasPlayedSound = true;
+            
+            // Create notification with sound
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const notification = new Notification('Timer Complete! ⏰', {
+                    body: this.targetTitle || 'Your timer has finished',
+                    silent: false
+                });
+            } else if ('Notification' in window && Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        const notification = new Notification('Timer Complete! ⏰', {
+                            body: this.targetTitle || 'Your timer has finished',
+                            silent: false
+                        });
+                    }
+                });
+            }
+            
+            // Also play a simple tone as backup
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Play a pleasant two-tone chime
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.15); // E5
+                
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.4);
+            } catch (e) {
+                console.log('Audio playback failed:', e);
+            }
+        }
     }
 
     // Check window size
     checkWindowSize() {
         const width = window.innerWidth;
-        this.isCompact = width < 280;
+        const height = window.innerHeight;
+        // Hide date input if window is too small in either dimension
+        this.isCompact = width < 280 || height < 200;
     }
+
+
 
     // Keyboard shortcuts
     connectedCallback() {
@@ -201,6 +254,13 @@ class LinearTimer extends LitElement {
         if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
             e.preventDefault();
             window.electronAPI.createNewTimer();
+            return;
+        }
+
+        // Show San Francisco time
+        if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+            e.preventDefault();
+            window.electronAPI.createSFTimeWindow();
             return;
         }
 

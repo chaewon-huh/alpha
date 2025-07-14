@@ -54,6 +54,18 @@ function createNewTimer() {
     return win;
 }
 
+// Create San Francisco time window
+function createSFTimeWindow() {
+    const win = windowManager.createSFTimeWindow();
+    windows.add(win);
+    
+    win.on('closed', () => {
+        windows.delete(win);
+    });
+    
+    return win;
+}
+
 // IPC Handlers
 function setupIpcHandlers() {
     ipcMain.handle('window:minimize', (event) => {
@@ -72,5 +84,9 @@ function setupIpcHandlers() {
     
     ipcMain.handle('window:createNew', () => {
         createNewTimer();
+    });
+    
+    ipcMain.handle('window:createSFTime', () => {
+        createSFTimeWindow();
     });
 }
