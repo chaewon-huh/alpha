@@ -155,7 +155,7 @@ class LinearTimer extends LitElement {
         } else if (hours > 0) {
             return `${hours}h ${minutes}m`;
         } else if (minutes > 0) {
-            return `${minutes}m ${seconds}s`;
+            return `${minutes}m`;
         } else {
             return `${seconds}s`;
         }
