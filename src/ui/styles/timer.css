@@ -17,7 +17,7 @@ body {
     background: rgba(20, 20, 20, 0.98);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-radius: 16px;
+    border-radius: 24px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -94,11 +94,29 @@ body.glass-effect .window-container {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
+    border-radius: 24px;
 }
 
 /* Ensure timer content is visible on glass */
 body.glass-effect linear-timer {
-    background: rgba(0, 0, 0, 0.6);
+    background: transparent;
     display: flex;
     height: 100vh;
+}
+
+/* Enhance text visibility on glass */
+body.glass-effect .countdown-display {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+body.glass-effect .target-title-input {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+body.glass-effect .date-input {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }

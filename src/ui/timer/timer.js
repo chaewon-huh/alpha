@@ -30,7 +30,7 @@ class LinearTimer extends LitElement {
             height: 100vh;
             color: rgba(255, 255, 255, 0.9);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: rgba(20, 20, 20, 0.98);
+            background: transparent;
             padding: 20px;
             -webkit-app-region: drag;
         }

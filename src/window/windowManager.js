@@ -9,10 +9,11 @@ let shouldUseLiquidGlass = false;
 // Check if we're on macOS
 if (os.platform() === 'darwin') {
     try {
-        liquidGlass = require('electron-liquid-glass');
+        const liquidGlassModule = require('electron-liquid-glass');
+        liquidGlass = liquidGlassModule.default || liquidGlassModule;
         shouldUseLiquidGlass = true;
     } catch (e) {
-        // Liquid glass not available
+        console.error('Failed to load liquid glass:', e);
     }
 }
 
@@ -23,37 +24,38 @@ function createTimerWindow() {
         height: 200,
         frame: false,
         transparent: true,
-        backgroundColor: '#141414',
+        // backgroundColor: '#141414', // Remove this - it blocks liquid glass!
         resizable: true,
         fullscreen: false,
         alwaysOnTop: true,
         hasShadow: false,
-        vibrancy: false,
+        vibrancy: false, // Must be false for liquid glass
+        focusable: true,  // Keep window focusable
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
+            nodeIntegration: true,     // Changed to match example
+            contextIsolation: false,    // Changed to match example
             preload: path.join(__dirname, '../preload.js')
         }
     });
     
-    // Set visibility and hide window buttons on macOS
+    // Set visibility on all workspaces
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-    if (os.platform() === 'darwin') {
-        win.setWindowButtonVisibility(false);
-    }
     
-    // Apply liquid glass effect if available
-    if (shouldUseLiquidGlass && liquidGlass) {
-        win.webContents.once('did-finish-load', () => {
+    // Load the timer UI FIRST
+    win.loadFile(path.join(__dirname, '../ui/timer/timer.html'));
+    
+    // Apply liquid glass effect after content loads
+    win.webContents.once('did-finish-load', () => {
+        if (shouldUseLiquidGlass && liquidGlass) {
             try {
                 const glassId = liquidGlass.addView(win.getNativeWindowHandle(), {
-                    cornerRadius: 16,
-                    tintColor: '#00000010'
+                    cornerRadius: 24
                 });
                 
-                // Apply glass variant
-                if (glassId !== null && liquidGlass.GlassMaterialVariant) {
-                    liquidGlass.unstable_setVariant(glassId, liquidGlass.GlassMaterialVariant.bubbles || 2);
+                if (glassId !== -1) {
+                    liquidGlass.unstable_setVariant(glassId, 3); // appIcons variant
+                    liquidGlass.unstable_setScrim(glassId, 0);
+                    liquidGlass.unstable_setSubdued(glassId, 0);
                 }
                 
                 // Add glass class to body for CSS adjustments
@@ -61,13 +63,10 @@ function createTimerWindow() {
                     document.body.classList.add('glass-effect');
                 `);
             } catch (error) {
-                // Failed to apply liquid glass
+                console.error('Failed to apply liquid glass:', error);
             }
-        });
-    }
-    
-    // Load the timer UI
-    win.loadFile(path.join(__dirname, '../ui/timer/timer.html'));
+        }
+    });
     
     // Open DevTools in development
     if (process.env.NODE_ENV === 'development') {
@@ -84,37 +83,37 @@ function createSFTimeWindow() {
         height: 180,
         frame: false,
         transparent: true,
-        backgroundColor: '#141414',
+        // backgroundColor: '#141414', // Remove this - it blocks liquid glass!
         resizable: true,
         fullscreen: false,
         alwaysOnTop: true,
         hasShadow: false,
-        vibrancy: false,
+        vibrancy: false, // Must be false for liquid glass
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
+            nodeIntegration: true,     // Changed to match example
+            contextIsolation: false,    // Changed to match example
             preload: path.join(__dirname, '../preload.js')
         }
     });
     
-    // Set visibility and hide window buttons on macOS
+    // Set visibility on all workspaces
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-    if (os.platform() === 'darwin') {
-        win.setWindowButtonVisibility(false);
-    }
     
-    // Apply liquid glass effect if available
-    if (shouldUseLiquidGlass && liquidGlass) {
-        win.webContents.once('did-finish-load', () => {
+    // Load the SF time UI FIRST
+    win.loadFile(path.join(__dirname, '../ui/sftime/sftime.html'));
+    
+    // Apply liquid glass effect after content loads
+    win.webContents.once('did-finish-load', () => {
+        if (shouldUseLiquidGlass && liquidGlass) {
             try {
                 const glassId = liquidGlass.addView(win.getNativeWindowHandle(), {
-                    cornerRadius: 16,
-                    tintColor: '#00000010'
+                    cornerRadius: 24
                 });
                 
-                // Apply glass variant
-                if (glassId !== null && liquidGlass.GlassMaterialVariant) {
-                    liquidGlass.unstable_setVariant(glassId, liquidGlass.GlassMaterialVariant.bubbles || 2);
+                if (glassId !== -1) {
+                    liquidGlass.unstable_setVariant(glassId, 3); // appIcons variant
+                    liquidGlass.unstable_setScrim(glassId, 0);
+                    liquidGlass.unstable_setSubdued(glassId, 0);
                 }
                 
                 // Add glass class to body for CSS adjustments
@@ -122,13 +121,10 @@ function createSFTimeWindow() {
                     document.body.classList.add('glass-effect');
                 `);
             } catch (error) {
-                // Failed to apply liquid glass
+                console.error('Failed to apply liquid glass:', error);
             }
-        });
-    }
-    
-    // Load the SF time UI
-    win.loadFile(path.join(__dirname, '../ui/sftime/sftime.html'));
+        }
+    });
     
     // Open DevTools in development
     if (process.env.NODE_ENV === 'development') {
