@@ -18,22 +18,20 @@ if (os.platform() === 'darwin') {
 }
 
 function createTimerWindow() {
-    // Create window - minimal size
     const win = new BrowserWindow({
         width: 300,
         height: 200,
         frame: false,
         transparent: true,
-        // backgroundColor: '#141414', // Remove this - it blocks liquid glass!
         resizable: true,
         fullscreen: false,
         alwaysOnTop: true,
         hasShadow: false,
         vibrancy: false, // Must be false for liquid glass
-        focusable: true,  // Keep window focusable
+        focusable: true,
         webPreferences: {
-            nodeIntegration: true,     // Changed to match example
-            contextIsolation: false,    // Changed to match example
+            nodeIntegration: true,
+            contextIsolation: false,
             preload: path.join(__dirname, '../preload.js')
         }
     });
@@ -41,7 +39,7 @@ function createTimerWindow() {
     // Set visibility on all workspaces
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
     
-    // Load the timer UI FIRST
+    // Load the timer UI
     win.loadFile(path.join(__dirname, '../ui/timer/timer.html'));
     
     // Apply liquid glass effect after content loads
@@ -49,14 +47,14 @@ function createTimerWindow() {
         if (shouldUseLiquidGlass && liquidGlass) {
             try {
                 const glassId = liquidGlass.addView(win.getNativeWindowHandle(), {
-                    cornerRadius: 40,  // Much more rounded corners
-                    tintColor: '#00000040'  // 50% black tint
+                    cornerRadius: 60,
+                    tintColor: '#00000080'  // 50% black tint
                 });
                 
                 if (glassId !== -1) {
-                    liquidGlass.unstable_setVariant(glassId, 8); // controlCenter variant
+                    liquidGlass.unstable_setVariant(glassId, 11); // bubbles variant
                     liquidGlass.unstable_setScrim(glassId, 0);
-                    liquidGlass.unstable_setSubdued(glassId, 0);
+                    liquidGlass.unstable_setSubdued(glassId, 1);
                 }
                 
                 // Add glass class to body for CSS adjustments
@@ -68,7 +66,6 @@ function createTimerWindow() {
             }
         }
     });
-    
     
     // Open DevTools in development
     if (process.env.NODE_ENV === 'development') {
@@ -85,15 +82,14 @@ function createSFTimeWindow() {
         height: 180,
         frame: false,
         transparent: true,
-        // backgroundColor: '#141414', // Remove this - it blocks liquid glass!
         resizable: true,
         fullscreen: false,
         alwaysOnTop: true,
         hasShadow: false,
         vibrancy: false, // Must be false for liquid glass
         webPreferences: {
-            nodeIntegration: true,     // Changed to match example
-            contextIsolation: false,    // Changed to match example
+            nodeIntegration: true,
+            contextIsolation: false,
             preload: path.join(__dirname, '../preload.js')
         }
     });
@@ -101,7 +97,7 @@ function createSFTimeWindow() {
     // Set visibility on all workspaces
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
     
-    // Load the SF time UI FIRST
+    // Load the SF time UI
     win.loadFile(path.join(__dirname, '../ui/sftime/sftime.html'));
     
     // Apply liquid glass effect after content loads
@@ -109,12 +105,12 @@ function createSFTimeWindow() {
         if (shouldUseLiquidGlass && liquidGlass) {
             try {
                 const glassId = liquidGlass.addView(win.getNativeWindowHandle(), {
-                    cornerRadius: 40,  // Much more rounded corners
+                    cornerRadius: 40,
                     tintColor: '#00000080'  // 50% black tint
                 });
                 
                 if (glassId !== -1) {
-                    liquidGlass.unstable_setVariant(glassId, 8); // controlCenter variant
+                    liquidGlass.unstable_setVariant(glassId, 11); // bubbles variant
                     liquidGlass.unstable_setScrim(glassId, 0);
                     liquidGlass.unstable_setSubdued(glassId, 0);
                 }
