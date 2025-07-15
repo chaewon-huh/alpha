@@ -2,7 +2,7 @@
 
 Minimal timer for macOS with liquid glass effect.
 
-![Alpha Timer Screenshot](./assets/screenshot.png)
+![Alpha Timer Screenshot](./assets/screenshot.jpg)
 
 ## Requirements
 
