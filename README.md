@@ -1,31 +1,36 @@
-# Alpha
+# Alpha Timer
 
-Minimal timer app, for my personal use.
+Minimal timer for macOS with liquid glass effect.
 
-## Installation
+![Alpha Timer Screenshot](./assets/alpha-timer-preview.png)
+
+## Requirements
+
+- macOS 13+
+- Node.js 22+
+
+## Install
 
 ```bash
-# Clone the repository
-git clone https://github.com/[username]/alpha.git
-cd alpha
-
-# Install dependencies
 npm install
-
-# Run the app
 npm start
 ```
 
-## Usage
+## Features
 
-- Set timer name and target date/time
-- `Cmd+N` - Create new timer
-- `Esc` - Close timer
-- Drag anywhere to move
+- Liquid glass UI (electron-liquid-glass)
+- Multiple timers
+- SF time display
+- Keyboard shortcuts (Cmd+N, Cmd+S, Esc)
+- Draggable windows
+- Font scaling (Cmd +/-)
 
 ## Build
 
 ```bash
-# Build for macOS
 npm run dist
 ```
+
+## License
+
+MIT
