@@ -49,11 +49,12 @@ function createTimerWindow() {
         if (shouldUseLiquidGlass && liquidGlass) {
             try {
                 const glassId = liquidGlass.addView(win.getNativeWindowHandle(), {
-                    cornerRadius: 24
+                    cornerRadius: 40,  // Much more rounded corners
+                    tintColor: '#00000040'  // 50% black tint
                 });
                 
                 if (glassId !== -1) {
-                    liquidGlass.unstable_setVariant(glassId, 3); // appIcons variant
+                    liquidGlass.unstable_setVariant(glassId, 8); // controlCenter variant
                     liquidGlass.unstable_setScrim(glassId, 0);
                     liquidGlass.unstable_setSubdued(glassId, 0);
                 }
@@ -67,6 +68,7 @@ function createTimerWindow() {
             }
         }
     });
+    
     
     // Open DevTools in development
     if (process.env.NODE_ENV === 'development') {
@@ -107,11 +109,12 @@ function createSFTimeWindow() {
         if (shouldUseLiquidGlass && liquidGlass) {
             try {
                 const glassId = liquidGlass.addView(win.getNativeWindowHandle(), {
-                    cornerRadius: 24
+                    cornerRadius: 40,  // Much more rounded corners
+                    tintColor: '#00000080'  // 50% black tint
                 });
                 
                 if (glassId !== -1) {
-                    liquidGlass.unstable_setVariant(glassId, 3); // appIcons variant
+                    liquidGlass.unstable_setVariant(glassId, 8); // controlCenter variant
                     liquidGlass.unstable_setScrim(glassId, 0);
                     liquidGlass.unstable_setSubdued(glassId, 0);
                 }
